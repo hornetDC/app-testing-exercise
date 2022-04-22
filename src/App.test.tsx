@@ -1,9 +1,14 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import App from './App';
+import { render, screen } from "@testing-library/react";
+import "@testing-library/jest-dom/extend-expect";
+import App from "./App";
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+jest.mock("./api");
+
+describe("Test async", () => {
+  test("should render users", async () => {
+    render(<App />);
+
+    const userList = screen.getAllByRole("listitem");
+    expect(userList).toHaveLength(10);
+  });
 });

@@ -1,26 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import { fakeApi } from "./api";
 
-function App() {
+type User = {
+  id: number;
+  name: string;
+};
+
+export default function App() {
+  const [users, setUsers] = useState<User[]>();
+
+  useEffect(() => {
+    (async () => {
+      const data = await fakeApi();
+      const users: User[] = data.map((responseUser: any) => ({
+        id: responseUser.id,
+        name: responseUser.name,
+      }));
+      setUsers(users);
+    })();
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <ul>
+        {users?.map((user: User) => {
+          return <li key={user.id}>{user.name}</li>;
+        })}
+      </ul>
     </div>
   );
 }
-
-export default App;
